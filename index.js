@@ -2,12 +2,23 @@ var debug = require('debug')('karma-server-side');
 var originalRequireCache;
 var context = {};
 var cwd = process.cwd();
+var path = require('path');
 
 function isLocalModule(filename) {
   return filename.indexOf(cwd) != -1 && !filename.match(/[/\\]node_modules[/\\]/);
 }
 
-function createFramework(emitter, io) {
+function createFramework(emitter, io, files) {
+  var p = path.join(require.resolve('karma'), '../../node_modules/socket.io/node_modules',
+     '/socket.io-client/socket.io.js');
+  // make io lib available in context
+  files.unshift({
+    pattern: p,
+    included: true,
+    served: true,
+  });
+
+
   emitter.on('run_start', function () {
     // Store originalRequireCache once when Karma starts.
     // To prevent the situation where second 'run_start' (e.g. user clicked karma Debug button)
@@ -91,7 +102,7 @@ function serialiseError(error) {
   return s;
 }
 
-createFramework.$inject = ['emitter', 'socketServer'];
+createFramework.$inject = ['emitter', 'socketServer', 'config.files'];
 
 module.exports = {
   'framework:server-side': [ 'factory', createFramework ]

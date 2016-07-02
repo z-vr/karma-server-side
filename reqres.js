@@ -1,4 +1,3 @@
-var io = require('socket.io-client');
 var findUrlRoot = require('./findUrlRoot');
 
 var messages = {};
