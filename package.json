@@ -1,6 +1,6 @@
 {
   "name": "karma-server-side",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -23,6 +23,7 @@
     "watchify": "3.7.0"
   },
   "dependencies": {
+    "debug": "2.2.0",
     "lowscore": "1.8.0",
     "parse-function": "2.3.0",
     "socket.io-client": "1.4.5"
