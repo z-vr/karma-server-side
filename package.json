@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "karma start --single-run"
+    "test": "karma start --single-run",
+    "karma": "karma start"
   },
   "author": "Tim Macfarlane <timmacfarlane@gmail.com>",
   "license": "ISC",
@@ -25,7 +26,6 @@
   "dependencies": {
     "debug": "2.2.0",
     "lowscore": "1.8.1",
-    "parse-function": "2.3.2",
-    "socket.io-client": "1.4.8"
+    "parse-function": "2.3.2"
   }
 }
