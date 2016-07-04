@@ -1,5 +1,5 @@
 {
-  "name": "karma-server-side",
+  "name": "@zavr/karma-server-side",
   "version": "1.6.0",
   "description": "",
   "main": "index.js",
@@ -7,7 +7,12 @@
     "test": "karma start --single-run",
     "karma": "karma start"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/z-vr/karma-server-side.git"
+  },
   "author": "Tim Macfarlane <timmacfarlane@gmail.com>",
+  "contributors": ["Anton <anton@digitalanimal.com>"],
   "license": "ISC",
   "browser": "browser.js",
   "devDependencies": {
