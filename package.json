@@ -1,6 +1,6 @@
 {
   "name": "@zavr/karma-server-side",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,9 @@
     "url": "https://github.com/z-vr/karma-server-side.git"
   },
   "author": "Tim Macfarlane <timmacfarlane@gmail.com>",
-  "contributors": ["Anton <anton@digitalanimal.com>"],
+  "contributors": [
+    "Anton <anton@digitalanimal.com>"
+  ],
   "license": "ISC",
   "browser": "browser.js",
   "devDependencies": {
