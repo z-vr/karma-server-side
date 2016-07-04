@@ -9,11 +9,21 @@ function isLocalModule(filename) {
 }
 
 function createFramework(emitter, io, files) {
-  var p = path.join(require.resolve('karma'), '../../node_modules/socket.io/node_modules',
-     '/socket.io-client/socket.io.js');
+  var socketIoJsPath;
+  try {
+    // npm v3
+    var socketIoModulePath = require.resolve('socket.io-client');
+    socketIoJsPath = path.join(socketIoModulePath, '../../socket.io.js');
+  } catch(err) {
+    // npm v2
+    socketIoJsPath = path.join(require.resolve('karma'),
+      '../../node_modules/socket.io/node_modules',
+      '/socket.io-client/socket.io.js');
+  }
+
   // make io lib available in context
   files.unshift({
-    pattern: p,
+    pattern: socketIoJsPath,
     included: true,
     served: true,
   });
