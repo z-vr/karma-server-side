@@ -62,6 +62,58 @@ server.run(function () {
 });
 ```
 
+
+## returning a promise
+If you use `runPromise` method, it will return a promise to execute your function on
+the server, and it will be resolved with an object containing the promise you requested, e.g.,
+
+```js
+server.runPromise(function () {
+  var fs = serverRequire('fs-promise');
+  return fs.readFile('afile.txt', 'utf-8');
+}).then(function (res) {
+  // res: { promise: Promise{} }
+  return res.promise;
+}).then(function (fileContents) {
+  // fileContents is the contents of afile.txt
+});
+```
+
+This allows to synchronise code execution between browsers and Karma server. For example:
+
+```js
+it('should listen for requests') {
+  var p = server.run(function () {
+    return new Promise(function (resolve) {
+      // assuming we've created some http server in context beforehand
+      this.httpServer.once('request', resolve);
+    });
+  });
+  request('http://localhost:8080/test');
+  return p;
+}
+```
+Here, we will tell an http server to resolve a promise on request, however due to the fact that
+the socket.io message from the browser to the server might take a few _ms_ to be delivered, our
+test would have executed the request before the promise was created. To solve this problem, we
+use `runPromise` which returns a promise which gurantees that the message was delived, and it
+is resolved with an object `{ promise: Promise{} }`, so that the promises are not chained.
+
+```js
+it('should listen for requests') {
+ return server.runPromise(function () {
+    return new Promise(function (resolve) {
+      // assuming we've created some http server in context beforehand
+      this.httpServer.once('request', resolve);
+    });
+  }).then(function (res) {
+    // promise has been created on the server, can send a request now
+    request('http://localhost:8080/test');
+    return res.promise;
+  });
+}
+```
+
 ## passing arguments
 
 You can pass arguments to the function:
