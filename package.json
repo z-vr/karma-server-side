@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "karma start --single-run",
-    "karma": "karma start"
+    "karma": "karma start",
+    "debug": "DEBUG=karma-server-side karma start --log-level=DEBUG"
   },
   "repository": {
     "type": "git",

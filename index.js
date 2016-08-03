@@ -52,9 +52,17 @@ function createFramework(emitter, io, files) {
   serverSideIo.on('connection', function (socket) {
     socket.on('server-side', function (request) {
       debug('run', request);
-      run(request, function (error, result) {
-        var response = {id: request.id};
+      var response = { id: request.id };
 
+      function acknowledge() {
+        debug('acknowledge');
+        socket.emit('server-side', {
+          id: request.id,
+          acknowledge: true,
+        });
+      }
+
+      function complete(error, result) {
         if (error) {
           debug('error', error);
           response.error = serialiseError(error);
@@ -62,9 +70,10 @@ function createFramework(emitter, io, files) {
           debug('result', result);
           response.result = result;
         }
-
         socket.emit('server-side', response);
-      });
+      }
+
+      run(request, acknowledge, complete);
     });
   });
 }
@@ -75,7 +84,7 @@ function serverRequire(moduleName) {
   return require(modulePath);
 }
 
-function run(request, cb) {
+function run(request, acknowledge, cb) {
   var argumentNames = Object.keys(request.arguments);
   var argumentValues = argumentNames.map(function (name) {
     return request.arguments[name];
@@ -95,6 +104,7 @@ function run(request, cb) {
     var result = fn.apply(context, [serverRequire, serverRequire].concat(argumentValues));
 
     if (result && typeof result.then === 'function') {
+      acknowledge();
       result.then(sendResult, sendError);
     } else {
       sendResult(result);

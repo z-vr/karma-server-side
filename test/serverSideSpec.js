@@ -97,6 +97,29 @@ describe('server-side', function () {
     });
   });
 
+  describe('runPromise', function () {
+    it('returns rejected promise when function has an error', function () {
+      const errorText = 'test error text';
+      return server.runPromise(errorText, function (err) {
+        throw new Error(err);
+      }).then(function () {
+        throw new Error("expected exception to be thrown");
+      }, function (error) {
+        expect(error.message).to.equal(errorText);
+      });
+    });
+    it('returns a promise fulfilled with requested promise', function () {
+      return server.runPromise(function () {
+        return Promise.resolve('result');
+      }).then(function (res) {
+        expect(res.promise).to.be.a('Promise');
+        return res.promise;
+      }).then(function (promiseRes) {
+        expect(promiseRes).to.equal('result');
+      });
+    });
+  });
+
   context('when XHR has been mocked out', function () {
     var capturedRequest;
 
