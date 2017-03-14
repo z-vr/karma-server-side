@@ -13,12 +13,14 @@ function createFramework(emitter, io, files) {
   try {
     // npm v3
     var socketIoModulePath = require.resolve('socket.io-client');
-    socketIoJsPath = path.join(socketIoModulePath, '../../socket.io.js');
+    socketIoJsPath = path.join(socketIoModulePath, '../../dist/socket.io.js');
   } catch(err) {
     // npm v2
-    socketIoJsPath = path.join(require.resolve('karma'),
+    socketIoJsPath = path.join(
+      require.resolve('karma'),
       '../../node_modules/socket.io/node_modules',
-      '/socket.io-client/socket.io.js');
+      '/socket.io-client/dist/socket.io.js'
+    );
   }
 
   // make io lib available in context
